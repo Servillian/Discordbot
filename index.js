@@ -20,7 +20,7 @@ bot.on('message', msg => {
             if (!args[1]) return msg.reply('Please state how many messages to delete')
             msg.channel.bulkDelete(args[1]);
             break;
-            case 'mute':
+            case 'mute' && msg.author.id === '276296416912080897':
                 var person  = msg.guild.member(msg.mentions.users.first() || msg.guild.members.get(args[1]));
                 if(!person) return  msg.reply("Cannot find the user " + person)
      
