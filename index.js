@@ -41,7 +41,7 @@ bot.on('message', msg => {
                     person.addRole(role.id);
         
         
-                    msg.channel.send(`@${person.user.tag} has now been muted for ${(ms(s(time)))}`)
+                    msg.channel.send(`@${person.user.tag} has now been muted for ${(ms(ms(time)))}`)
         
                     setTimeout(function(){
                     
