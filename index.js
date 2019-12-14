@@ -20,40 +20,42 @@ bot.on('message', msg => {
             if (!args[1]) return msg.reply('Please state how many messages to delete')
             msg.channel.bulkDelete(args[1]);
             break;
-            case 'mute' && msg.author.id === '276296416912080897':
-                var person  = msg.guild.member(msg.mentions.users.first() || msg.guild.members.get(args[1]));
-                if(!person) return  msg.reply("Cannot find the user " + person)
-     
-                let mainrole = msg.guild.roles.find(role => role.name === "Lifeform");
-                let role = msg.guild.roles.find(role => role.name === "Muted");
-               
-     
-                if(!role) return msg.reply("Couldn't find the mute role")
-     
-     
-                let time = args[2];
-                if(!time){
-                    return msg.reply("You didnt specify a time!");
-                }
-     
-                person.removeRole(mainrole.id)
-                person.addRole(role.id);
-     
-     
-                msg.channel.send(`@${person.user.tag} has now been muted for ${ms(ms(time))}`)
-     
-                setTimeout(function(){
-                   
-                    person.addRole(mainrole.id)
-                    person.removeRole(role.id);
-                    console.log(role.id)
-                    msg.channel.send(`@${person.user.tag} has been unmuted.`)
-                }, ms(time));
-     
-     
-       
-            break;
+            case 'mute':
+                    if (msg.author.id == '276296416912080897') {
+                        var person  = msg.guild.member(msg.mentions.users.first() || msg.guild.members.get(args[1]));
+                        if(!person) return  msg.reply("Cannot find the user " + person)
+        
+                        let mainrole = msg.guild.roles.find(role => role.name === "Lifeform");
+                        let role = msg.guild.roles.find(role => role.name === "Muted");
+                
+        
+                        if(!role) return msg.reply("Couldn't find the mute role")
+                        
+        
+                    let time = args[2];
+                    if(!time){
+                        return msg.reply("You didnt specify a time!");
+                    }
+        
+                    person.removeRole(mainrole.id)
+                    person.addRole(role.id);
+        
+        
+                    msg.channel.send(`@${person.user.tag} has now been muted for ${ms(ms(time))}`)
+        
+                    setTimeout(function(){
+                    
+                        person.addRole(mainrole.id)
+                        person.removeRole(role.id);
+                        console.log(role.id)
+                        msg.channel.send(`@${person.user.tag} has been unmuted.`)
+                    }, ms(time));
+        
+        
+        
+                break;
         }
+    }
 }) 
 
 
