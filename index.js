@@ -49,7 +49,7 @@ bot.on('message', msg => {
                         person.removeRole(role.id);
                         console.log(role.id)
                         msg.channel.send(`@${person.user.tag} has been unmuted.`)
-                    }, ms(time));
+                    }, ms(ms(time)));
         
         
         
