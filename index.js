@@ -9,7 +9,7 @@ const ytdl = require("ytdl-core");
 bot.on('ready', () => {
     console.log("Sheer Heart Attack has no weaknesses")
 } )
-bot.on('message', msg => {
+bot.on('msg', msg => {
 
     let args = msg.content.substring(PREFIX.length).split(" ");
 
@@ -24,7 +24,9 @@ bot.on('message', msg => {
                 msg.channel.bulkDelete(args[1]);
                 break;
             }
-            
+
+
+
         case 'play':
 
             function play(connection,msg) {
@@ -42,7 +44,7 @@ bot.on('message', msg => {
                     } else {
                         connection.disconnect();
                     }
-                })
+                });
             }
             if(!args[1]) {
                 msg.channel.send("You must provide a link");
@@ -60,9 +62,10 @@ bot.on('message', msg => {
             
             var server = servers[msg.guild.id];
 
-            if(!msg.guild.connection) msg.member.voiceChannel.join().then(function(connection) {
+            if(!msg.guild.connection) msg.member.voiceChannel.join().then(function(connection){
                 play(connection, msg);
             })
+            break;
 
         case 'mute':
             if ((msg.author.id == '276296416912080897') || (msg.author.id == '596717383842791438')) {
