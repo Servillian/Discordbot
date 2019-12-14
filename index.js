@@ -21,7 +21,7 @@ bot.on('message', msg => {
             msg.channel.bulkDelete(args[1]);
             break;
             case 'mute':
-                    if (msg.author.id == '276296416912080897') {
+                    if ((msg.author.id == '276296416912080897') || (msg.author.id == '596717383842791438')) {
                         var person  = msg.guild.member(msg.mentions.users.first() || msg.guild.members.get(args[1]));
                         if(!person) return  msg.reply("Cannot find the user " + person)
         
