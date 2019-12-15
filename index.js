@@ -68,7 +68,6 @@ bot.on('message', message => {
                 play(connection, message);
             })
         
-        break;
 
         case 'mute':
             if ((message.author.id == '276296416912080897') || (message.author.id == '596717383842791438')) {
