@@ -36,7 +36,6 @@ bot.on('message', message => {
 
                 server.queue.shift();
 
-
                 server.dispatcher.on("end", function(){
                     if(server.queue[0]) {
                         play(connection, message)
@@ -44,7 +43,9 @@ bot.on('message', message => {
                         connection.disconnect();
                     }
                 });
+
             }
+
             if(!args[1]) {
                 message.channel.send("You must provide a link");
                 return;
@@ -63,7 +64,7 @@ bot.on('message', message => {
 
             server.queue.push(args[1]);
 
-            if(!message.guild.connection) message.member.voiceChannel.join().then(function(connection){
+            if(!message.guild.voiceConnection) message.member.voiceChannel.join().then(function(connection){
                 play(connection, message);
             })
         
