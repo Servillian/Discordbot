@@ -1,5 +1,7 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
+const client = new Discord.Client();
+const queue = new Map();
 const token = process.env.BOT_TOKEN;
 const ms = require("ms");
 const PREFIX = '$';
@@ -28,46 +30,53 @@ bot.on('message', message => {
 
 
         case 'play':
-
-            function play(connection, message) {
-                var server = servers[message.guild.id];
-
-                server.dispatcher = connection.playStream(ytdl(server.queue[0], {filter: "audioonly"}))
-
-                server.queue.shift();
-
-                server.dispatcher.on("end", function(){
-                    if(server.queue[0]) {
-                        play(connection, message)
-                    } else {
-                        connection.disconnect();
-                    }
-                });
-
-            }
-
-            if(!args[1]) {
-                message.channel.send("You must provide a link");
-                return;
-            }
-
-            if(!message.member.voiceChannel) {
-                message.channel.send("You must be in a voice channel to use this command");
-                return;
-            }
-
-            if(!servers[message.guild.id]) servers[message.guild.id] = {
-                queue: []
-            }
+            async function execute(message, serverQueue) {
+                const args = message.content.split(' ');
             
-            var server = servers[message.guild.id];
+                const voiceChannel = message.member.voiceChannel;
+                if (!voiceChannel) return message.channel.send('You need to be in a voice channel to play music!');
+                const permissions = voiceChannel.permissionsFor(message.client.user);
+                if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
+                    return message.channel.send('I need the permissions to join and speak in your voice channel!');
+                }
+            
+                const songInfo = await ytdl.getInfo(args[1]);
+                const song = {
+                    title: songInfo.title,
+                    url: songInfo.video_url,
+                };
+            
+                if (!serverQueue) {
+                    const queueContruct = {
+                        textChannel: message.channel,
+                        voiceChannel: voiceChannel,
+                        connection: null,
+                        songs: [],
+                        volume: 5,
+                        playing: true,
+                    };
+            
+                    queue.set(message.guild.id, queueContruct);
+            
+                    queueContruct.songs.push(song);
+            
+                    try {
+                        var connection = await voiceChannel.join();
+                        queueContruct.connection = connection;
+                        play(message.guild, queueContruct.songs[0]);
+                    } catch (err) {
+                        console.log(err);
+                        queue.delete(message.guild.id);
+                        return message.channel.send(err);
+                    }
+                } else {
+                    serverQueue.songs.push(song);
+                    console.log(serverQueue.songs);
+                    return message.channel.send(`${song.title} has been added to the queue!`);
+                }
+            
+            }
 
-            server.queue.push(args[1]);
-
-            if(!message.guild.voiceConnection) message.member.voiceChannel.join().then(function(connection){
-                play(connection, message);
-            })
-        
 
         case 'mute':
             if ((message.author.id == '276296416912080897') || (message.author.id == '596717383842791438')) {
