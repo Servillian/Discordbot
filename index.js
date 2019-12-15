@@ -3,8 +3,6 @@ const bot = new Discord.Client();
 const token = process.env.BOT_TOKEN;
 const ms = require("ms");
 const PREFIX = '$';
-var servers = {};
-const ytdl = require("ytdl-core");
 
 bot.on('ready', () => {
     console.log("Sheer Heart Attack has no weaknesses")
