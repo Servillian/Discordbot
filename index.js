@@ -76,6 +76,26 @@ bot.on('message', message => {
                 }
             
             }
+            function play(guild, song) {
+                const serverQueue = queue.get(guild.id);
+            
+                if (!song) {
+                    serverQueue.voiceChannel.leave();
+                    queue.delete(guild.id);
+                    return;
+                }
+            
+                const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
+                    .on('end', () => {
+                        console.log('Music ended!');
+                        serverQueue.songs.shift();
+                        play(guild, serverQueue.songs[0]);
+                    })
+                    .on('error', error => {
+                        console.error(error);
+                    });
+                dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+            }
 
 
         case 'mute':
