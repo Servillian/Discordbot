@@ -11,6 +11,7 @@ function play(connection, message) {
   }
   const bot = new Discord.Client()
   const servers = {};
+  PREFIX = '$'
 
     bot.on('message', function(message) {
       if (message.author.equals(bot.user)) return;
