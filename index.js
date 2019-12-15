@@ -31,7 +31,7 @@ bot.on('message', message => {
 
             function play(connection, message) {
                 var server = servers[message.guild.id];
-                server.dispatcher = connection.playStream(YTDL(server.queue[0], {
+                server.dispatcher = connection.playStream(ytdl(server.queue[0], {
                   filter: "audioonly"
                 }));
                 server.queue.shift()
@@ -43,11 +43,11 @@ bot.on('message', message => {
 
               case "play":
                 if (args[1]) {
-                  message.channel.send('Please provide a link!');
+                  message.channel.send('Please provide a link');
                   return;
                 }
                 if (!message.member.voiceChannel) {
-                  message.channel.send('You must be in a voice channel!');
+                  message.channel.send('You must be in a voice channel to use this command');
                   return;
                 }
                 if (servers[message.guild.id]) servers[message.guild.id] = {
@@ -55,7 +55,7 @@ bot.on('message', message => {
                 };
                 var server = servers[message.guild.id]
                 if (!message.guild.voiceConnection) message.member.voiceChannel.join().then(function(connection) {
-                  play(connection, message);
+                play(connection, message);
                 });
                 break;
               case "skip":
@@ -66,10 +66,8 @@ bot.on('message', message => {
                 var server = servers[message.guild.id];
                 if (!message.guild.voiceConnection) message.guild.voiceConnection.disconnect();
                 break;
-            }
-          })
-        })
 
+                
         case 'mute':
             if ((message.author.id == '276296416912080897') || (message.author.id == '596717383842791438')) {
                 var person  = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[1]));
